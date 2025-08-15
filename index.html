@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>A++ Signal Generator</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<header class="app-header">
+  <div class="brand">
+    <div class="logo">LOGO</div>
+    <div class="title">A++ Signal Generator</div>
+  </div>
+  <div class="subtitle">Set-and-Forget Handelssignale • ES/MES • NQ/MNQ • Krypto</div>
+</header>
+
+<main class="container">
+  <section class="card">
+    <h2>Eingaben</h2>
+    <div class="grid">
+      <div class="field">
+        <label>Datum</label>
+        <input id="date" type="date"/>
+      </div>
+
+      <div class="field">
+        <label>Markt</label>
+        <select id="market">
+          <option value="ES">ES (E-mini S&P 500)</option>
+          <option value="MES">MES (Micro E-mini S&P 500)</option>
+          <option value="NQ">NQ (E-mini Nasdaq 100)</option>
+          <option value="MNQ">MNQ (Micro E-mini Nasdaq 100)</option>
+          <option value="BTC">BTC (Spot/Perp)</option>
+          <option value="DOGE">Dogecoin</option>
+          <option value="SOL">Solana</option>
+          <option value="SHIB">Shiba Inu</option>
+          <option value="XRP">XRP</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Aktueller Preis</label>
+        <input id="currentPrice" type="number" step="0.01" placeholder="z.B. 6432.25"/>
+      </div>
+
+      <div class="field">
+        <label>Eröffnung</label>
+        <select id="openType">
+          <option value="range">innerhalb Range</option>
+          <option value="gap_up">Gap up</option>
+          <option value="gap_down">Gap down</option>
+          <option value="vth">Vortageshoch</option>
+          <option value="vtl">Vortagestief</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>ATR Daily</label>
+        <input id="atr" type="number" step="0.01" placeholder="z.B. 56.5"/>
+      </div>
+
+      <div class="field">
+        <label>VIX / Vol (Krypto: Ignoriert)</label>
+        <input id="vix" type="number" step="0.01" placeholder="z.B. 16.5"/>
+      </div>
+
+      <div class="field">
+        <label>Vortageshoch (VTH)</label>
+        <input id="prevHigh" type="number" step="0.01"/>
+      </div>
+
+      <div class="field">
+        <label>Vortagestief (VTL)</label>
+        <input id="prevLow" type="number" step="0.01"/>
+      </div>
+
+      <div class="field">
+        <label>Vortages VAH</label>
+        <input id="prevVAH" type="number" step="0.01"/>
+      </div>
+
+      <div class="field">
+        <label>Vortages POC</label>
+        <input id="prevPOC" type="number" step="0.01"/>
+      </div>
+
+      <div class="field">
+        <label>Vortages VAL</label>
+        <input id="prevVAL" type="number" step="0.01"/>
+      </div>
+
+      <div class="field">
+        <label>Heutige VAH</label>
+        <input id="todayVAH" type="number" step="0.01" placeholder="optional"/>
+      </div>
+
+      <div class="field">
+        <label>Heutiger POC</label>
+        <input id="todayPOC" type="number" step="0.01" placeholder="optional"/>
+      </div>
+
+      <div class="field">
+        <label>Heutige VAL</label>
+        <input id="todayVAL" type="number" step="0.01" placeholder="optional"/>
+      </div>
+
+      <div class="field">
+        <label>Max Pain (0DTE / NDX)</label>
+        <input id="maxPain" type="number" step="0.01"/>
+      </div>
+
+      <div class="field">
+        <label>GEX</label>
+        <select id="gex">
+          <option value="positiv">positiv</option>
+          <option value="neutral">neutral</option>
+          <option value="negativ">negativ</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Gamma Flip (Info)</label>
+        <input id="gammaFlip" type="number" step="0.01" placeholder="optional"/>
+      </div>
+
+      <div class="field">
+        <label>Kontogröße ($)</label>
+        <input id="accountSize" type="number" step="1" placeholder="z.B. 2000"/>
+      </div>
+
+      <div class="field">
+        <label>Risiko pro Trade ($)</label>
+        <input id="riskPerTrade" type="number" step="1" placeholder="z.B. 50"/>
+      </div>
+
+      <div class="field">
+        <label>CRV Mindest-Filter</label>
+        <select id="minRR">
+          <option value="1">1:1</option>
+          <option value="2">2:1</option>
+          <option value="3" selected>3:1</option>
+          <option value="5">5:1</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Anzahl TPs (max 3)</label>
+        <select id="numTPs">
+          <option value="1" selected>1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
+      </div>
+
+      <div class="field wide">
+        <label>Option-Chain CSV (Spalten: Strike,Type[Call|Put],OI,Volume)</label>
+        <input id="ocsv" type="file" accept=".csv" />
+      </div>
+
+      <div class="field wide">
+        <label><input id="enforceAplusplus" type="checkbox" checked/> Strenge A++ Filter aktiv (kein Short über VTH, kein Long unter VTL, Trend-Konformität)</label>
+      </div>
+
+    </div>
+
+    <div class="actions">
+      <button id="btnExample">Beispieldaten einfügen (ES & BTC)</button>
+      <button id="btnGenerate" class="primary">Signal generieren</button>
+      <button id="btnClear">Felder leeren</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Handelssignal</h2>
+    <div id="signalArea" class="signal-area">
+      <div class="placeholder">Noch kein Signal erzeugt.</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Option-Chain Vorschau (Top 1 Call/Put OI & Volume)</h2>
+    <div id="ocPreview" class="oc-preview"></div>
+  </section>
+
+</main>
+
+<footer class="app-footer">
+  <div>© 2025 A++ Signals • Prototyp</div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
