@@ -4,191 +4,256 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>A++ Signal Generator</title>
-  <link rel="stylesheet" href="styles.css"/>
+  <link rel="stylesheet" href="./styles.css"/>
+  <!-- pdf.js (für Option-Chain PDF Upload & Parsing) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    if (window['pdfjsLib']) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+    }
+  </script>
 </head>
 <body>
-<header class="app-header">
-  <div class="brand">
-    <div class="logo">LOGO</div>
-    <div class="title">A++ Signal Generator</div>
-  </div>
-  <div class="subtitle">Set-and-Forget Handelssignale • ES/MES • NQ/MNQ • Krypto</div>
-</header>
-
-<main class="container">
-  <section class="card">
-    <h2>Eingaben</h2>
-    <div class="grid">
-      <div class="field">
-        <label>Datum</label>
-        <input id="date" type="date"/>
-      </div>
-
-      <div class="field">
-        <label>Markt</label>
-        <select id="market">
-          <option value="ES">ES (E-mini S&P 500)</option>
-          <option value="MES">MES (Micro E-mini S&P 500)</option>
-          <option value="NQ">NQ (E-mini Nasdaq 100)</option>
-          <option value="MNQ">MNQ (Micro E-mini Nasdaq 100)</option>
-          <option value="BTC">BTC (Spot/Perp)</option>
-          <option value="DOGE">Dogecoin</option>
-          <option value="SOL">Solana</option>
-          <option value="SHIB">Shiba Inu</option>
-          <option value="XRP">XRP</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label>Aktueller Preis</label>
-        <input id="currentPrice" type="number" step="0.01" placeholder="z.B. 6432.25"/>
-      </div>
-
-      <div class="field">
-        <label>Eröffnung</label>
-        <select id="openType">
-          <option value="range">innerhalb Range</option>
-          <option value="gap_up">Gap up</option>
-          <option value="gap_down">Gap down</option>
-          <option value="vth">Vortageshoch</option>
-          <option value="vtl">Vortagestief</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label>ATR Daily</label>
-        <input id="atr" type="number" step="0.01" placeholder="z.B. 56.5"/>
-      </div>
-
-      <div class="field">
-        <label>VIX / Vol (Krypto: Ignoriert)</label>
-        <input id="vix" type="number" step="0.01" placeholder="z.B. 16.5"/>
-      </div>
-
-      <div class="field">
-        <label>Vortageshoch (VTH)</label>
-        <input id="prevHigh" type="number" step="0.01"/>
-      </div>
-
-      <div class="field">
-        <label>Vortagestief (VTL)</label>
-        <input id="prevLow" type="number" step="0.01"/>
-      </div>
-
-      <div class="field">
-        <label>Vortages VAH</label>
-        <input id="prevVAH" type="number" step="0.01"/>
-      </div>
-
-      <div class="field">
-        <label>Vortages POC</label>
-        <input id="prevPOC" type="number" step="0.01"/>
-      </div>
-
-      <div class="field">
-        <label>Vortages VAL</label>
-        <input id="prevVAL" type="number" step="0.01"/>
-      </div>
-
-      <div class="field">
-        <label>Heutige VAH</label>
-        <input id="todayVAH" type="number" step="0.01" placeholder="optional"/>
-      </div>
-
-      <div class="field">
-        <label>Heutiger POC</label>
-        <input id="todayPOC" type="number" step="0.01" placeholder="optional"/>
-      </div>
-
-      <div class="field">
-        <label>Heutige VAL</label>
-        <input id="todayVAL" type="number" step="0.01" placeholder="optional"/>
-      </div>
-
-      <div class="field">
-        <label>Max Pain (0DTE / NDX)</label>
-        <input id="maxPain" type="number" step="0.01"/>
-      </div>
-
-      <div class="field">
-        <label>GEX</label>
-        <select id="gex">
-          <option value="positiv">positiv</option>
-          <option value="neutral">neutral</option>
-          <option value="negativ">negativ</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label>Gamma Flip (Info)</label>
-        <input id="gammaFlip" type="number" step="0.01" placeholder="optional"/>
-      </div>
-
-      <div class="field">
-        <label>Kontogröße ($)</label>
-        <input id="accountSize" type="number" step="1" placeholder="z.B. 2000"/>
-      </div>
-
-      <div class="field">
-        <label>Risiko pro Trade ($)</label>
-        <input id="riskPerTrade" type="number" step="1" placeholder="z.B. 50"/>
-      </div>
-
-      <div class="field">
-        <label>CRV Mindest-Filter</label>
-        <select id="minRR">
-          <option value="1">1:1</option>
-          <option value="2">2:1</option>
-          <option value="3" selected>3:1</option>
-          <option value="5">5:1</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label>Anzahl TPs (max 3)</label>
-        <select id="numTPs">
-          <option value="1" selected>1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-        </select>
-      </div>
-
-      <div class="field wide">
-        <label>Option-Chain CSV (Spalten: Strike,Type[Call|Put],OI,Volume)</label>
-        <input id="ocsv" type="file" accept=".csv" />
-      </div>
-
-      <div class="field wide">
-        <label><input id="enforceAplusplus" type="checkbox" checked/> Strenge A++ Filter aktiv (kein Short über VTH, kein Long unter VTL, Trend-Konformität)</label>
-      </div>
-
+  <header class="topbar">
+    <div class="brand">
+      <img src="./assets/logo-placeholder.svg" alt="Logo" class="logo"/>
+      <h1>A++ Signal Generator</h1>
     </div>
+    <div class="meta">Prototype • v1.0</div>
+  </header>
 
-    <div class="actions">
-      <button id="btnExample">Beispieldaten einfügen (ES & BTC)</button>
-      <button id="btnGenerate" class="primary">Signal generieren</button>
-      <button id="btnClear">Felder leeren</button>
-    </div>
-  </section>
+  <main class="container">
+    <section class="card">
+      <h2>Markt & Daten</h2>
+      <div class="grid grid-2">
+        <div>
+          <label>Markt</label>
+          <select id="market">
+            <option value="ES">ES</option>
+            <option value="MES">MES</option>
+            <option value="NQ">NQ</option>
+            <option value="MNQ">MNQ</option>
+            <option value="BTC">BTC</option>
+            <option value="DOGE">Dogecoin</option>
+            <option value="SOL">Solana</option>
+            <option value="SHIB">Shiba Inu</option>
+            <option value="XRP">XRP</option>
+          </select>
+        </div>
+        <div>
+          <label>Datum</label>
+          <input id="date" type="text" placeholder="z.B. 12.08.2025"/>
+        </div>
+      </div>
 
-  <section class="card">
-    <h2>Handelssignal</h2>
-    <div id="signalArea" class="signal-area">
-      <div class="placeholder">Noch kein Signal erzeugt.</div>
-    </div>
-  </section>
+      <div id="futures-fields">
+        <div class="grid grid-3">
+          <div>
+            <label>Vortag VAH</label>
+            <input id="prevVAH" type="number" step="0.25" />
+          </div>
+          <div>
+            <label>Vortageshoch (VTH)</label>
+            <input id="prevHigh" type="number" step="0.25" />
+          </div>
+          <div>
+            <label>Vortag POC</label>
+            <input id="prevPOC" type="number" step="0.25" />
+          </div>
+        </div>
+        <div class="grid grid-3">
+          <div>
+            <label>Vortag VAL</label>
+            <input id="prevVAL" type="number" step="0.25" />
+          </div>
+          <div>
+            <label>Vortagestief (VTL)</label>
+            <input id="prevLow" type="number" step="0.25" />
+          </div>
+          <div>
+            <label>Max Pain (0DTE)</label>
+            <input id="maxPain" type="number" step="0.01"/>
+          </div>
+        </div>
+        <div class="grid grid-3">
+          <div>
+            <label>GEX</label>
+            <select id="gex">
+              <option value="positiv">positiv</option>
+              <option value="neutral">neutral</option>
+              <option value="negativ">negativ</option>
+            </select>
+          </div>
+          <div>
+            <label>Gamma Flip</label>
+            <input id="gammaFlip" type="number" step="0.01"/>
+          </div>
+          <div>
+            <label>Eröffnung</label>
+            <div class="grid grid-2">
+              <select id="openContext">
+                <option value="ueberVTH">Über VTH</option>
+                <option value="unterVTH">Unter VTH</option>
+                <option value="innerhalb">Innerhalb Vortagesrange</option>
+              </select>
+              <select id="gapType">
+                <option value="keinGap">Kein Gap</option>
+                <option value="gapUp">Gap Up</option>
+                <option value="gapDown">Gap Down</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-3">
+          <div>
+            <label>ATR Daily</label>
+            <input id="atr" type="number" step="0.01"/>
+          </div>
+          <div>
+            <label>VIX</label>
+            <input id="vix" type="number" step="0.01"/>
+          </div>
+          <div>
+            <label>Aktueller Preis</label>
+            <input id="price" type="number" step="0.25"/>
+          </div>
+        </div>
 
-  <section class="card">
-    <h2>Option-Chain Vorschau (Top 1 Call/Put OI & Volume)</h2>
-    <div id="ocPreview" class="oc-preview"></div>
-  </section>
+        <div id="nq-oi-fields" class="grid grid-2" style="display:none;">
+          <div>
+            <label>Call OI (Strike / OI)</label>
+            <input id="callOI" type="text" placeholder="z.B. 23400 / 246"/>
+          </div>
+          <div>
+            <label>Put OI (Strike / OI)</label>
+            <input id="putOI" type="text" placeholder="z.B. 23100 / 194"/>
+          </div>
+        </div>
 
-</main>
+        <div id="option-pdf" class="uploader">
+          <label>Option Chain (PDF hochladen für ES/MES)</label>
+          <input id="pdfFile" type="file" accept="application/pdf"/>
+          <div id="pdfStatus" class="muted">Noch keine Datei…</div>
+        </div>
+      </div>
 
-<footer class="app-footer">
-  <div>© 2025 A++ Signals • Prototyp</div>
-</footer>
+      <div id="crypto-fields" style="display:none;">
+        <div class="grid grid-3">
+          <div>
+            <label>Eröffnung Tageskerze</label>
+            <input id="cOpen" type="number" step="0.01"/>
+          </div>
+          <div>
+            <label>Vortageshoch</label>
+            <input id="cHigh" type="number" step="0.01"/>
+          </div>
+          <div>
+            <label>Vortagestief</label>
+            <input id="cLow" type="number" step="0.01"/>
+          </div>
+        </div>
+        <div class="grid grid-3">
+          <div>
+            <label>VAH</label>
+            <input id="cVAH" type="number" step="0.01"/>
+          </div>
+          <div>
+            <label>POC</label>
+            <input id="cPOC" type="number" step="0.01"/>
+          </div>
+          <div>
+            <label>VAL</label>
+            <input id="cVAL" type="number" step="0.01"/>
+          </div>
+        </div>
+        <div class="grid grid-3">
+          <div>
+            <label>ATR Daily</label>
+            <input id="cATR" type="number" step="0.01"/>
+          </div>
+          <div>
+            <label>Funding Rate (%)</label>
+            <input id="cFunding" type="number" step="0.0001" placeholder="z.B. 0.0015"/>
+          </div>
+          <div>
+            <label>OI (%)</label>
+            <input id="cOI" type="number" step="0.01" placeholder="z.B. 3.32"/>
+          </div>
+        </div>
+        <div class="grid grid-1">
+          <div>
+            <label>Aktueller Preis</label>
+            <input id="cPrice" type="number" step="0.01"/>
+          </div>
+        </div>
+      </div>
 
-<script src="script.js"></script>
+      <hr/>
+      <h3>Risikoparameter</h3>
+      <div class="grid grid-3">
+        <div>
+          <label>Kontogröße ($)</label>
+          <input id="acct" type="number" step="1" placeholder="z.B. 2000"/>
+        </div>
+        <div>
+          <label>Risiko pro Trade ($)</label>
+          <input id="riskPerTrade" type="number" step="1" placeholder="z.B. 50"/>
+        </div>
+        <div>
+          <label>CRV Mindestfilter</label>
+          <select id="rrFilter">
+            <option value="1">≥ 1:1</option>
+            <option value="2">≥ 2:1</option>
+            <option value="3" selected>≥ 3:1</option>
+            <option value="5">≥ 5:1</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-3">
+        <div>
+          <label>Anzahl TPs</label>
+          <select id="tpCount">
+            <option value="1" selected>1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </div>
+        <div>
+          <label>Kontrakt-Empfehlung</label>
+          <select id="contractType">
+            <option value="auto" selected>Automatisch</option>
+            <option value="mini">Mini bevorzugen</option>
+            <option value="micro">Micro bevorzugen</option>
+          </select>
+        </div>
+        <div>
+          <label>CRV-Only Filter aktiv</label>
+          <select id="crvStrict">
+            <option value="on" selected>Ja</option>
+            <option value="off">Nein</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="generate">Signal generieren</button>
+        <button id="reset">Formular zurücksetzen</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Handelssignal</h2>
+      <div id="signalArea" class="signal-area">
+        <div class="muted">Noch kein Signal generiert.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>© 2025 A++ Strategy Prototype</span>
+  </footer>
+
+  <script src="./logic.js"></script>
 </body>
 </html>
