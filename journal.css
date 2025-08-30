@@ -1,14 +1,8 @@
-.ajs-card{background:#111522;border:1px solid #1b2134;border-radius:14px;padding:16px 16px 22px;color:#e7ecff}
-.ajs-grid{display:grid;gap:12px}
-.ajs-grid-3{grid-template-columns:1fr 1fr 1fr}
-.ajs-actions-inline{display:flex;align-items:flex-end;gap:10px}
-.ajs-stats{margin:10px 0 6px;display:flex;gap:10px;flex-wrap:wrap}
-.ajs-stat{border:1px solid #223058;background:#0f1422;border-radius:10px;padding:8px 10px}
-.ajs-table{margin-top:10px;border:1px solid #223058;border-radius:10px;overflow:hidden}
-.ajs-table table{width:100%;border-collapse:collapse}
-.ajs-table th,.ajs-table td{border-bottom:1px solid #1f2742;padding:8px 10px;font-size:13px}
-.ajs-table th{background:#0f1422;text-align:left}
-.ajs-table tr:last-child td{border-bottom:none}
-.ajs-ghost{background:#29314a;color:#cdd6ff;border:none;border-radius:10px;padding:10px 14px;font-weight:600;cursor:pointer}
-.ajs-danger{background:#ff4d6d;color:#fff;border:none;border-radius:10px;padding:10px 14px;font-weight:600;cursor:pointer}
-@media (max-width:900px){.ajs-grid-3{grid-template-columns:1fr}}
+/* ajs- Journal minimal styles (no override of existing classes) */
+.ajs-table-wrap{overflow:auto}
+.ajs-table{width:100%;border-collapse:collapse;font-size:12px}
+.ajs-table th,.ajs-table td{border:1px solid #1b2134;padding:6px;vertical-align:top}
+.ajs-table th{position:sticky;top:0;background:#0d111a}
+.ajs-actions{display:flex;flex-wrap:wrap;gap:6px}
+.ajs-stats{margin:8px 0;font-size:13px;opacity:.95}
+.ajs-pill{display:inline-block;padding:2px 6px;border:1px solid #2a3452;border-radius:14px;margin-right:4px}

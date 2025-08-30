@@ -12,6 +12,7 @@
       pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
     }
   </script>
+  <link rel="stylesheet" href="./journal.css"/>
 </head>
 <body>
   <header class="topbar">
@@ -247,7 +248,53 @@
       <div id="signalArea" class="signal-area">
         <div class="muted">Noch kein Signal generiert.</div>
       </div>
-    </section>
+    
+<div class="actions" style="margin-top:8px">
+  <button id="ajsJournalAddBtn" disabled>Zum Journal hinzufügen</button>
+</div>
+</section>
+
+
+<section class="card" id="ajs-journal-section">
+  <h2>Journal</h2>
+  <div class="grid grid-3" style="margin-bottom:8px">
+    <div>
+      <label>Filter Markt</label>
+      <select id="ajs-filter-market">
+        <option value="ALL">Alle</option>
+        <option>ES</option><option>MES</option><option>NQ</option><option>MNQ</option>
+        <option>BTC</option><option>DOGE</option><option>SOL</option><option>SHIB</option><option>XRP</option>
+      </select>
+    </div>
+    <div>
+      <label>Filter Status</label>
+      <select id="ajs-filter-status">
+        <option value="ALL">Alle</option>
+        <option>OPEN</option><option>TP1</option><option>TP2</option><option>TP3</option>
+        <option>SL</option><option>MANUAL</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:8px;align-items:flex-end">
+      <button id="ajs-export-csv">CSV Export</button>
+      <button id="ajs-clear-journal" title="Nur lokal!">Journal leeren</button>
+    </div>
+  </div>
+  <div id="ajs-stats" class="ajs-stats"></div>
+  <div class="ajs-table-wrap">
+    <table id="ajs-journal-table" class="ajs-table">
+      <thead>
+        <tr>
+          <th>Datum</th><th>Markt</th><th>Side</th><th>Order</th>
+          <th>Entry</th><th>SL</th><th>TPs</th><th>CRV</th><th>TP1% </th><th>Kontrakte</th>
+          <th>Status</th><th>PnL Ticks</th><th>PnL USD</th><th>Notiz</th><th>Aktionen</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+
   </main>
 
   <footer class="footer">
@@ -255,5 +302,6 @@
   </footer>
 
   <script src="./logic.js"></script>
+  <script src="./journal.js"></script>
 </body>
 </html>
